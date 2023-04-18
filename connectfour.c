@@ -13,9 +13,9 @@
 */
 
 void PrintGrid(struct matrix* m) {
-    for (size_t r = 0; r < m->rows; ++r) {
+    for (int r = 0; r < m->rows; ++r) {
         printf("+--+--+--+--+--+--+--+\n|");
-        for (size_t c = 0; c < m->cols; ++c) {
+        for (int c = 0; c < m->cols; ++c) {
             printf(" %d|", m->data[r * m->cols + c]);
         }
         printf("\n");
@@ -24,14 +24,15 @@ void PrintGrid(struct matrix* m) {
     printf("  0  1  2  3  4  5  6\n");
 }
 
-bool IsMoveValid(struct matrix* m, size_t c) {
-    if (c > m->cols + 2) {
+bool IsMoveValid(struct matrix* m, int c) {
+    if (c >= m->cols || c < 0) {
         printf("Error: Column not valid.\n");
         return false;
     }
-    size_t i = c;
+    int i = c;
     while (1) {
         if (m->rows * m->cols - (m->cols - c) < i) {
+            printf("Error: column full.\n");
             return false;
         }
         if (m->data[c] == 0) {
@@ -41,24 +42,24 @@ bool IsMoveValid(struct matrix* m, size_t c) {
     }
 }
 
-size_t GetPlayerMove(struct matrix *m) {
+int GetPlayerMove(struct matrix *m) {
     printf("Your turn: choose the column you would like to put your piece in.\n");
-    size_t c = 0;
-    int n = scanf("%zu", &c);
+    int c = 0;
+    int n = scanf("%i", &c);
     if (n != 1)
         return c;
     while(!IsMoveValid(m, c)){
         printf("Your turn: choose the column you would like to put your piece in.\n");
-        n = scanf("%zu", &c);
+        n = scanf("%i", &c);
         if (n != 1)
             return c;
     }
     return c;
 }
 
-static bool CheckOneCol(struct matrix* m, size_t i, int value) {
-    size_t count = 0;
-    size_t c = i;
+static bool CheckOneCol(struct matrix* m, int i, int value) {
+    int count = 0;
+    int c = i;
     while (i <= m->rows * m->cols - (m->cols - c)) {
         if (m->data[i] == value) {
             ++count;
@@ -75,7 +76,7 @@ static bool CheckOneCol(struct matrix* m, size_t i, int value) {
 }
 
 static bool CheckCols(struct matrix* m, int value) {
-    for (size_t i = 0; i < m->cols; ++i) {
+    for (int i = 0; i < m->cols; ++i) {
         if (CheckOneCol(m, i, value)) {
             return true;
         }
@@ -83,9 +84,9 @@ static bool CheckCols(struct matrix* m, int value) {
     return false;
 }
 
-static bool CheckOneRow(struct matrix* m, size_t i, int value) {
-    size_t r = i;
-    size_t count = 0;
+static bool CheckOneRow(struct matrix* m, int i, int value) {
+    int r = i;
+    int count = 0;
     while (i < (r+1) * m->cols) {
         if (m->data[i] == value) {
             ++count;
@@ -102,7 +103,7 @@ static bool CheckOneRow(struct matrix* m, size_t i, int value) {
 }
 
 static bool CheckRows(struct matrix* m, int value) {
-    for (size_t i = 0; i < m->rows; ++i) {
+    for (int i = 0; i < m->rows; ++i) {
         if (CheckOneRow(m, i, value)) {
             return true;
         }
@@ -110,9 +111,9 @@ static bool CheckRows(struct matrix* m, int value) {
     return false;
 }
 
-static bool SupDiagonal(struct matrix* m, int value, size_t r_start, size_t c_start) {
+static bool SupDiagonal(struct matrix* m, int value, int r_start, int c_start) {
 
-    for (size_t i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) {
         if (m->data[r_start * m->cols + c_start] != value)
             return false;
         r_start--;
@@ -121,9 +122,9 @@ static bool SupDiagonal(struct matrix* m, int value, size_t r_start, size_t c_st
     return true;
 }
 
-static bool InfDiagonal(struct matrix* m, int value, size_t r_start, size_t c_start) {
+static bool InfDiagonal(struct matrix* m, int value, int r_start, int c_start) {
 
-    for (size_t i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) {
         if (m->data[r_start * m->cols + c_start] != value)
             return false;
         r_start++;
@@ -133,8 +134,8 @@ static bool InfDiagonal(struct matrix* m, int value, size_t r_start, size_t c_st
 }
 
 static bool CheckDiagonal(struct matrix* m, int value) {
-    for (size_t c = 0; c < 4; ++c) {
-        for (size_t r = 0; r < m->rows; ++r) {
+    for (int c = 0; c < 4; ++c) {
+        for (int r = 0; r < m->rows; ++r) {
             if (r < 3) {
                 if (InfDiagonal(m, value, r, c))
                     return true;
@@ -154,8 +155,8 @@ bool Win(struct matrix* m, int value) {
     return false;
 }
 
-void Place(struct matrix* m, int value, size_t c) {
-    size_t r = m->rows;
+void Place(struct matrix* m, int value, int c) {
+    int r = m->rows;
     while (m->data[r * m->cols - (m->cols - c)] != 0) {
         r--;
     }
@@ -168,7 +169,7 @@ void ConnectFour(struct matrix* m) {
     bool victory1;
     while (1) {
         printf("Player 1\n");
-        size_t c = GetPlayerMove(m);
+        int c = GetPlayerMove(m);
         Place(m, 1, c);
         PrintGrid(m);
         if (Win(m, 1)) {
