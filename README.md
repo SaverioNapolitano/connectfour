@@ -6,7 +6,7 @@ Currently the program let the user play connect-four against another user provid
 
 Being a side-project it will probably be updated rarely, main features scheduled to be added include a **graphical interface** and some **code optimization**.
 
-More challeging goals include the opportunity for the user to **play against the computer** (**easy mode**: computer's moves are random, **pro mode**: computer's moves are calculted).
+More challeging goals include the opportunity for the user to **play against the computer** (**easy mode**: computer's moves are random, **pro mode**: computer's moves are calculated).
 
 Indeed, some **more test** are always welcomed.
 
