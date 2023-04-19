@@ -3,7 +3,6 @@
 //
 
 #include "connectfour.h"
-#include <stdio.h>
 /* To do:
 
 	GUI;
@@ -164,7 +163,7 @@ void Place(struct matrix* m, int value, int c) {
     m->data[r * m->cols - (m->cols - c)] = value;
 }
 
-void ConnectFour(struct matrix* m) {
+void ConnectFourTwoPlayers(struct matrix* m) {
     PrintGrid(m);
     bool victory1;
     while (1) {
@@ -192,4 +191,18 @@ void ConnectFour(struct matrix* m) {
         return;
     }
     printf("Player 1 won.\nPress any key to close the program.\n");
+}
+
+void ConnectFour(struct matrix *m, int choice){
+    switch (choice) {
+        case 1:
+            ConnectFourTwoPlayers(m);
+            break;
+        /*case 2:
+            ConnectFourComputerEasyMode(m);
+            break;
+        case 3:
+            ConnectFourComputerHardMode(m);
+            break;*/
+    }
 }
