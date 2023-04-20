@@ -11,6 +11,7 @@
 
 */
 
+
 void PrintGrid(struct matrix* m) {
     for (int r = 0; r < m->rows; ++r) {
         printf("+--+--+--+--+--+--+--+\n|");
@@ -193,15 +194,54 @@ void ConnectFourTwoPlayers(struct matrix* m) {
     printf("Player 1 won.\nPress any key to close the program.\n");
 }
 
+static int GetComputerMove(struct matrix*m){
+    int c = rand() % (m->cols + 1);
+    while(!IsMoveValid(m, c)){
+        c = rand() % (m->cols + 1);
+    }
+    return c;
+}
+void ConnectFourComputerEasyMode(struct matrix*m){
+    srand(time(NULL));
+    PrintGrid(m);
+    bool victory1;
+    while (1) {
+        printf("Player 1\n");
+        int c = GetPlayerMove(m);
+        Place(m, 1, c);
+        PrintGrid(m);
+        if (Win(m, 1)) {
+            victory1 = true;
+            break;
+        }
+        printf("Computer\n");
+        c = GetComputerMove(m);
+        Place(m, 2, c);
+        PrintGrid(m);
+        printf("Computer placed in column %d\n", c);
+        if (Win(m, 2)) {
+            victory1 = false;
+            break;
+        }
+    }
+    if (!victory1) {
+        printf("Computer won.\nPress any key to close the program.\n");
+        int c;
+        scanf("%d", &c);
+        return;
+    }
+    printf("Player 1 won.\nPress any key to close the program.\n");
+
+}
 void ConnectFour(struct matrix *m, int choice){
     switch (choice) {
         case 1:
             ConnectFourTwoPlayers(m);
             break;
-        /*case 2:
+        case 2:
             ConnectFourComputerEasyMode(m);
             break;
-        case 3:
+        /*case 3:
             ConnectFourComputerHardMode(m);
             break;*/
     }
