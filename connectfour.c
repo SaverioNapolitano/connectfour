@@ -240,7 +240,7 @@ static int GetComputerMove(struct matrix*m){
     return c;
 }
 /**
- *
+ * checks if the first player has won
  * @param m the matrix that represents the grid
  * @param mode the mode chosen by the user
  * @return true if the first player won, otherwise false
