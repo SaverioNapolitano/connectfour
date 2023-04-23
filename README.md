@@ -2,11 +2,11 @@
 A simple connect-four game made in C
 
 ## How does it work?
-Currently the program let the user play connect-four against another user providing a _text-based interface_.
+Currently the program let the user play connect-four against another user (or the computer which moves randomly) providing a _text-based interface_.
 
 Being a side-project it will probably be updated rarely, main features scheduled to be added include a **graphical interface** and some **code optimization**.
 
-More challeging goals include the opportunity for the user to **play against the computer** (**easy mode**: computer's moves are random, **pro mode**: computer's moves are calculated).
+More challeging goals include the opportunity for the user to **play against the computer** in **hard mode** (computer's moves are calculated).
 
 Indeed, some **more test** are always welcomed.
 
