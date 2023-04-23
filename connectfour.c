@@ -226,39 +226,7 @@ void Place(struct matrix* m, int value, int c) {
 
     m->data[r * m->cols - (m->cols - c)] = value;
 }
-/**
- * allows two players to have a connect four game
- * @param m the matrix that represents the grid
- */
-void ConnectFourTwoPlayers(struct matrix* m) {
-    PrintGrid(m);
-    bool victory1;
-    while (1) {
-        printf("Player 1\n");
-        int c = GetPlayerMove(m);
-        Place(m, 1, c);
-        PrintGrid(m);
-        if (Win(m, 1)) {
-            victory1 = true;
-            break;
-        }
-        printf("Player 2\n");
-        c = GetPlayerMove(m);
-        Place(m, 2, c);
-        PrintGrid(m);
-        if (Win(m, 2)) {
-            victory1 = false;
-            break;
-        }
-    }
-    if (!victory1) {
-        printf("Player 2 won.\nPress any key to close the program.\n");
-        int c;
-        scanf("%d", &c);
-        return;
-    }
-    printf("Player 1 won.\nPress any key to close the program.\n");
-}
+
 /**
  * gets the move made by the computer
  * @param m the matrix that represents the grid
@@ -272,32 +240,61 @@ static int GetComputerMove(struct matrix*m){
     return c;
 }
 /**
- * allows a player to have a connect four game against the computer that moves randomly
+ *
  * @param m the matrix that represents the grid
+ * @param mode the mode chosen by the user
+ * @return true if the first player won, otherwise false
  */
-void ConnectFourComputerEasyMode(struct matrix*m){
-    srand(time(NULL));
-    PrintGrid(m);
-    bool victory1;
+static bool FirstPlayerWin(struct matrix *m, int mode){
     while (1) {
         printf("Player 1\n");
         int c = GetPlayerMove(m);
         Place(m, 1, c);
         PrintGrid(m);
         if (Win(m, 1)) {
-            victory1 = true;
-            break;
+            return true;
         }
-        printf("Computer\n");
-        c = GetComputerMove(m);
+        if(mode == 1){
+            printf("Player 2\n");
+            c = GetPlayerMove(m);
+        } else {
+            printf("Computer\n");
+            c = GetComputerMove(m);
+        }
         Place(m, 2, c);
         PrintGrid(m);
-        printf("Computer placed in column %d\n", c);
+        if(mode != 1){
+            printf("Computer placed in column %d\n", c);
+        }
         if (Win(m, 2)) {
-            victory1 = false;
-            break;
+            return false;
         }
     }
+}
+/**
+ * allows two players to have a connect four game
+ * @param m the matrix that represents the grid
+ */
+void ConnectFourTwoPlayers(struct matrix* m) {
+    PrintGrid(m);
+    bool victory1 = FirstPlayerWin(m, 1);
+    if (!victory1) {
+        printf("Player 2 won.\nPress any key to close the program.\n");
+        int c;
+        scanf("%d", &c);
+        return;
+    }
+    printf("Player 1 won.\nPress any key to close the program.\n");
+}
+
+/**
+ * allows a player to have a connect four game against the computer that moves randomly
+ * @param m the matrix that represents the grid
+ */
+void ConnectFourComputerEasyMode(struct matrix*m){
+    srand(time(NULL));
+    PrintGrid(m);
+    bool victory1 = FirstPlayerWin(m, 2);
     if (!victory1) {
         printf("Computer won.\nPress any key to close the program.\n");
         int c;
